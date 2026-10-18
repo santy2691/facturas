@@ -1,0 +1,27 @@
+<section class="home">
+  <header class="page-header">
+    <div class="page-heading">
+      <p class="meta">{{ today }}</p>
+      <h1>Hola, {{ user()?.firstName }}</h1>
+    </div>
+    <button
+      matButton="tonal"
+      type="button"
+      [disabled]="loggingOut()"
+      disabledInteractive
+      [attr.aria-busy]="loggingOut()"
+      (click)="logout()"
+    >
+      @if (loggingOut()) {
+        <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
+      } @else {
+        <mat-icon>logout</mat-icon>
+      }
+      Cerrar sesión
+    </button>
+  </header>
+  <div class="empty">
+    <h2>Todavía no hay nada por aquí</h2>
+    <p>Cuando haya secciones disponibles, aparecerán en esta página.</p>
+  </div>
+</section>

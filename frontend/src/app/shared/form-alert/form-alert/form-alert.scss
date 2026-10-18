@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.form-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+// 20px icon (24px - 4px) to sit at the 14px text size.
+mat-icon {
+  flex: none;
+  width: calc(var(--space-6) - var(--space-1));
+  height: calc(var(--space-6) - var(--space-1));
+  font-size: calc(var(--space-6) - var(--space-1));
+}

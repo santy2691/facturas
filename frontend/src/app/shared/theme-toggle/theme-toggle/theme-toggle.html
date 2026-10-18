@@ -1,0 +1,8 @@
+<button
+  matIconButton
+  type="button"
+  [attr.aria-label]="theme.isDark() ? 'Activar modo claro' : 'Activar modo oscuro'"
+  (click)="theme.toggle()"
+>
+  <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+</button>

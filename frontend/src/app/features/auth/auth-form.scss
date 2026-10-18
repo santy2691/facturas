@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  animation: page-enter var(--duration-enter) var(--ease-out) both;
+}
+
+.auth-card-header {
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: var(--rule-total);
+}
+
+.auth-card-content {
+  padding: var(--space-6);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.submit {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.switch {
+  margin: 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.switch a {
+  color: var(--carbon);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+
+  &:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--carbon);
+    outline-offset: 2px;
+  }
+}

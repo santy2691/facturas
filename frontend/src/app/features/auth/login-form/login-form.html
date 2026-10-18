@@ -1,0 +1,62 @@
+<mat-card appearance="outlined" class="auth-card">
+  <mat-card-header class="auth-card-header">
+    <h1 mat-card-title>Iniciar sesión</h1>
+  </mat-card-header>
+  <mat-card-content class="auth-card-content">
+    <form (submit)="submit($event)" novalidate class="form">
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          id="login-email"
+          type="email"
+          autocomplete="email"
+          [formField]="loginForm.email"
+        />
+        <mat-error>{{ loginForm.email().errors()[0]?.message }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Contraseña</mat-label>
+        <input
+          matInput
+          id="login-password"
+          autocomplete="current-password"
+          [type]="passwordMasked() ? 'password' : 'text'"
+          [formField]="loginForm.password"
+        />
+        <button
+          matIconButton
+          matSuffix
+          type="button"
+          class="mask-toggle"
+          [attr.aria-label]="passwordMasked() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+          (click)="passwordMasked.set(!passwordMasked())"
+        >
+          <mat-icon>{{ passwordMasked() ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <mat-error>{{ loginForm.password().errors()[0]?.message }}</mat-error>
+      </mat-form-field>
+
+      @if (serverError(); as message) {
+        <app-form-alert [message]="message" />
+      }
+
+      <button
+        matButton="filled"
+        type="submit"
+        class="submit"
+        [disabled]="loading()"
+        disabledInteractive
+        [attr.aria-busy]="loading()"
+      >
+        @if (loading()) {
+          <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
+        }
+        Iniciar sesión
+      </button>
+
+      <p class="switch">¿No tienes cuenta? <a routerLink="/registro">Regístrate</a></p>
+    </form>
+  </mat-card-content>
+</mat-card>

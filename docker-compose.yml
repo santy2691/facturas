@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:17
+    container_name: facturas_db
+    environment:
+      POSTGRES_DB: facturas
+      POSTGRES_USER: admin_factura
+      POSTGRES_PASSWORD: admin_facturas
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_factura -d facturas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

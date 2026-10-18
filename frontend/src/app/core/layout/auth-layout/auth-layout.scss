@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.auth-screen {
+  flex: 1;
+  display: flex;
+  padding: var(--space-8) var(--gutter);
+}
+
+// margin: auto centres the sheet without clipping when it is taller than the screen.
+.sheet {
+  width: min(100%, var(--sheet-narrow));
+  margin: auto;
+}

@@ -1,0 +1,6 @@
+<app-register-form
+  [loading]="loading()"
+  [serverError]="serverError()"
+  [fieldErrors]="fieldErrors()"
+  (submitted)="register($event)"
+/>

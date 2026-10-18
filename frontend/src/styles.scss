@@ -1,0 +1,192 @@
+@use '@angular/material' as mat;
+@use './styles/theme-colors' as app;
+
+$system-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+// Material Symbols Outlined (Apache 2.0, see public/fonts/material-symbols-LICENSE.txt),
+// self-hosted subset with only the icons the app uses: dark_mode, error, light_mode,
+// logout, visibility, visibility_off. To add an icon, regenerate the subset (see CLAUDE.md).
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/material-symbols-outlined.woff2') format('woff2');
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: app.$primary-palette,
+        tertiary: app.$tertiary-palette,
+        theme-type: color-scheme,
+      ),
+      typography: (
+        plain-family: $system-font,
+        brand-family: $system-font,
+        bold-weight: 600,
+        medium-weight: 500,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
+  // Design system "Libro de facturas" (see .interface-design/system.md).
+  // Colour: every token comes from --mat-sys-*, no fixed colours.
+  --paper: var(--mat-sys-surface);
+  --ink: var(--mat-sys-on-surface);
+  // Derived from --ink, not from on-surface-variant: in the generated dark palette
+  // on-surface-variant is almost equal to on-surface and the hierarchy collapses.
+  // Measured contrast on --paper: soft 8.7:1 light / 9.4:1 dark, faint 5.2:1 / 6.6:1.
+  --ink-soft: color-mix(in srgb, var(--mat-sys-on-surface) 80%, var(--mat-sys-surface));
+  --ink-faint: color-mix(in srgb, var(--mat-sys-on-surface) 65%, var(--mat-sys-surface));
+  --ink-ghost: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
+  --rule: var(--mat-sys-outline-variant);
+  --rule-total: 3px double var(--rule);
+  --carbon: var(--mat-sys-primary);
+  --stamp: var(--mat-sys-error);
+
+  // Spacing: 4px base.
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  // Layout.
+  --gutter: 24px;
+  --page-max: 1120px;
+  --sheet-narrow: 400px;
+  --bar-height: 56px;
+
+  // Radii: document radii, almost square corners.
+  --radius-control: var(--mat-sys-corner-extra-small);
+  --radius-sheet: var(--mat-sys-corner-small);
+  --radius-overlay: var(--mat-sys-corner-medium);
+
+  // Typography: composed from the M3 pieces, with the weights of the system.
+  --type-page-title: 600 var(--mat-sys-headline-medium-size) / var(--mat-sys-headline-medium-line-height) var(--mat-sys-headline-medium-font);
+  --type-section: 600 var(--mat-sys-title-large-size) / var(--mat-sys-title-large-line-height) var(--mat-sys-title-large-font);
+  --type-subtitle: 600 var(--mat-sys-title-medium-size) / var(--mat-sys-title-medium-line-height) var(--mat-sys-title-medium-font);
+  --type-body: 400 var(--mat-sys-body-medium-size) / var(--mat-sys-body-medium-line-height) var(--mat-sys-body-medium-font);
+  --type-meta: 500 var(--mat-sys-label-medium-size) / var(--mat-sys-label-medium-line-height) var(--mat-sys-label-medium-font);
+  --type-caption: 500 var(--mat-sys-label-small-size) / var(--mat-sys-label-small-line-height) var(--mat-sys-label-small-font);
+
+  // Motion.
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-enter: 200ms;
+
+  // Material overrides.
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: var(--paper),
+      container-text-color: var(--ink),
+      standard-height: var(--bar-height),
+      mobile-height: var(--bar-height),
+    )
+  );
+  @include mat.card-overrides(
+    (
+      outlined-container-color: var(--paper),
+      outlined-outline-color: var(--rule),
+      outlined-container-shape: var(--radius-sheet),
+      title-text-weight: 600,
+      title-text-size: var(--mat-sys-headline-medium-size),
+      title-text-line-height: var(--mat-sys-headline-medium-line-height),
+      title-text-tracking: -0.01em,
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-shape: var(--radius-control),
+      tonal-container-shape: var(--radius-control),
+      outlined-container-shape: var(--radius-control),
+      text-container-shape: var(--radius-control),
+    )
+  );
+  @include mat.strong-focus-indicators(
+    (
+      border-style: solid,
+      border-width: 2px,
+      border-color: var(--carbon),
+    )
+  );
+
+  &.app-dark {
+    color-scheme: dark;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+// Boot marker inside <app-root>; Angular replaces it when the app starts.
+.boot {
+  min-height: 100dvh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  font: var(--type-subtitle);
+  color: var(--ink-faint);
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+// 16px side margin on phones.
+@media (max-width: 599.98px) {
+  html {
+    --gutter: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+    }
+  }
+}
