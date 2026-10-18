@@ -37,8 +37,10 @@ describe('LoginForm', () => {
     await fixture.whenStable();
   }
 
-  it('shows the card title', () => {
-    expect(el.textContent).toContain('Iniciar sesión');
+  it('shows the heading without a card', () => {
+    expect(el.querySelector('.eyebrow')?.textContent).toBe('Acceso');
+    expect(el.querySelector('h1')?.textContent).toBe('Iniciar sesión');
+    expect(el.querySelector('mat-card')).toBeNull();
   });
 
   it('toggles the password mask with the eye button', async () => {

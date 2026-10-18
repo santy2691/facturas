@@ -15,19 +15,21 @@ Blanco roto del papel; azul violáceo del papel de calco y la tinta de sello (in
 en `src/styles/_theme-colors.scss`); grafito de los filetes; rojo de sello (errores y vencidas); verde apagado de
 "cobrada" (futuro); amarillo de subrayador (no se usa en la interfaz).
 
-## Firma: "la raya de total"
-Doble filete contable (`--rule-total`, `3px double`) bajo el membrete y bajo cada título de documento, más el
-**margen de talonario**: barra de 3x16px en `--carbon` delante de la marca.
+## Firma: "margen de talonario"
+Barra de 3x16px en `--carbon` delante de la marca. Los separadores son siempre un único filete de 1px en `--rule`:
+**nunca dobles filetes** (`border-style: double` ni dos líneas paralelas). Los títulos no llevan línea debajo; se
+separan del contenido con espacio.
 
 ## Defaults rechazados
 1. Barra lateral y KPIs inventados -> inicio con datos reales (fecha, saludo) y estado vacío honesto.
 2. Indigo decorativo, degradados -> indigo solo como tinta de acción e identidad (<=10%).
 3. Tarjetas con sombra, botones píldora, marca aislada en login -> papel plano con filetes, radios 4/8 y el
-   mismo membrete en todas las vistas.
+   mismo membrete en todas las vistas. Login y registro sin tarjeta: el formulario va directamente sobre el papel.
+4. Botón de cerrar sesión en la página -> menú de cuenta en el membrete.
 
 ## Profundidad
-**Solo bordes.** Filetes de 1px en `--rule`, `--rule-total` como firma, ninguna sombra propia. Tarjetas
-`appearance="outlined"`, toolbar sin elevación. Los overlays de Material (menús, diálogos) pueden llevar la
+**Solo bordes.** Filetes simples de 1px en `--rule`, ninguna sombra propia. Toolbar
+sin elevación. Los overlays de Material (menús, diálogos) pueden llevar la
 suya. Una sola superficie (`--paper`) para lienzo, cabecera y tarjetas.
 
 ## Tokens
@@ -39,7 +41,6 @@ suya. Una sola superficie (`--paper`) para lienzo, cabecera y tarjetas.
 | `--ink-faint` | texto nivel 3 (metadatos): mezcla 65% de on-surface con surface (5.2:1 claro / 6.6:1 oscuro). No usar on-surface-variant: en la paleta oscura generada es casi igual que on-surface |
 | `--ink-ghost` | texto nivel 4 (deshabilitado, 38%) |
 | `--rule` | filetes, bordes de tarjeta, separadores |
-| `--rule-total` | `3px double var(--rule)`: la firma |
 | `--carbon` | tinta de calco: acción principal, enlaces, foco, barra de la marca |
 | `--stamp` | sello rojo: solo errores |
 
@@ -74,23 +75,40 @@ Solo la entrada de página: `page-enter` (opacity + translateY 4px), `--duration
 tema no se anima.
 
 ## Overrides de Material (en `styles.scss`, con `mat.<componente>-overrides()`)
-toolbar (fondo paper, altura 56px), card outlined (paper, borde rule, radio sheet, título 28/600), button
-(radio control en filled/tonal/outlined/text) y `mat.strong-focus-indicators` (2px sólido en `--carbon`).
+toolbar (fondo paper, altura 56px), menu (fondo paper, radio overlay), table (fondo paper, cabecera 11/500
+`--ink-faint` con tracking 0.04em, filas con filete `--rule`), button (radio control en filled/tonal/outlined/text)
+y `mat.strong-focus-indicators` (2px sólido en `--carbon`).
 
 ## Patrones
-- **Membrete** (`core/layout/top-bar`): `<header>` + `mat-toolbar` 56px, borde inferior `--rule-total`, contenido
+- **Membrete** (`core/layout/top-bar`): `<header>` + `mat-toolbar` 56px, borde inferior 1px `--rule`, contenido
   centrado en `--page-max` con padding `--gutter`. Marca (barra 3x16px `--carbon`, 8px de separación, "Facturas"
-  16/24/600) a la izquierda y toggle a la derecha. Igual en app y en auth. La marca es un `<span>`, no un enlace.
+  16/24/600) a la izquierda; a la derecha el toggle y, con sesión, el menú de cuenta. Igual en app y en auth. La
+  marca es un `<span>`, no un enlace.
+- **Menú de cuenta** (`core/layout/account-menu`): `matButton` de texto con avatar (32px, radio control,
+  `primary-container` / `on-primary-container`, iniciales 12/600), nombre (oculto bajo 600px; el `aria-label`
+  lleva el nombre completo) y `expand_more`. Abre un `mat-menu` con nombre (14/600) y email (12/500 `--ink-faint`)
+  sobre un filete `--rule`, y el item "Cerrar sesión" con icono `logout`. Mientras cierra sesión, spinner en el
+  botón y `aria-busy`.
 - **Columna de página** (`MainLayout`): `width: min(100%, var(--page-max))`, centrada, padding `--space-8 --gutter`.
-- **Cabecera de página** (inicio): metadato 12/500 `--ink-faint` sobre el h1 (28/600), 4px entre ambos; acciones a
-  la derecha con `flex-wrap`; padding inferior 16px y `--rule-total` debajo.
-- **Hoja de auth**: columna `min(100%, var(--sheet-narrow))` centrada con `margin: auto`. Tarjeta outlined radio 8px,
-  padding 24px; cabecera con `h1` y `--rule-total` debajo. Formulario con gap 16px, botón principal a 24px del
-  último campo, enlace secundario a 16px.
+- **Cabecera de página** (inicio): metadato 12/500 `--ink-faint` sobre el h1 (28/600), 4px entre ambos; sin
+  línea debajo (32px de espacio hasta el contenido).
+- **Hoja de auth**: columna `min(100%, var(--sheet-narrow))` centrada con `margin: auto`, **sin tarjeta**.
+  Cabecera: metadato en mayúsculas (12/500 `--ink-faint`, tracking 0.04em; "Acceso", "Alta de usuario") sobre
+  el `h1`, 4px entre ambos y 32px hasta el formulario, sin línea. Formulario con gap 16px, botón principal a
+  24px del último campo, enlace secundario a 16px.
+- **Grupos de campos**: `fieldset` sin borde con `legend` en caption (11/500 mayúsculas `--ink-faint`), 12px
+  hasta el primer campo. Grupos siguientes con filete superior 1px `--rule` y 16px de padding. Campos cortos
+  emparentados (nombre y apellidos) en fila con `flex-wrap` y `flex: 1 1 160px`.
+- **Requisitos de contraseña**: lista bajo el campo (8px), 12/500, `aria-live="polite"` y enlazada con
+  `aria-describedby`. Pendiente: `radio_button_unchecked` en `--ink-faint`; cumplido: `check` en `--ink`. Se
+  distinguen por forma y luminosidad, nunca solo por tono.
+- **Tabla de registro** (inicio, "Libro registro"): `h2` 22/600 con metadato a la derecha; `mat-table` dentro de
+  una hoja con borde 1px `--rule`, radio 8px y `overflow-x: auto` (`min-width` 720px). Importes alineados a la
+  derecha. Vacía: fila `*matNoDataRow` con el patrón de estado vacío. Pie de total en 600 con filete superior.
 - **Alerta de formulario** (`shared/form-alert`): `role="alert"`, error-container, radio 4px, padding 12/16,
   icono `error` de 20px y 8px de separación del texto.
-- **Estado vacío**: borde 1px `--rule`, radio 8px, padding 32px. Título 16/600 `--ink`, texto 14px `--ink-soft`,
-  máx. 48ch, sin CTA.
+- **Estado vacío**: icono de 32px en `--ink-faint`, título 16/600 `--ink`, texto 14px `--ink-soft`, máx. 48ch,
+  centrado, padding 48/24, sin CTA mientras no exista la acción. Dentro de su contenedor (p. ej. la tabla).
 - **Marcador de arranque** (`index.html`): `<p class="boot">Facturas</p>` dentro de `<app-root>`, centrado,
   16/600 `--ink-faint`, sin JS.
 - **Enlaces de texto**: `--carbon`, subrayado 1px con `text-underline-offset: 2px` (2px en hover); en
@@ -98,6 +116,7 @@ toolbar (fondo paper, altura 56px), card outlined (paper, borde rule, radio shee
 
 ## No hacer
 - Sombras (`box-shadow`) propias.
+- Dobles filetes (`border-style: double`, dos líneas paralelas) y líneas bajo los títulos.
 - Botones píldora (salvo los `matIconButton`).
 - Colores hex/rgb/hsl sueltos; todo con `--mat-sys-*` o los tokens de arriba.
 - Selectores `.mat-mdc-*` / `.mdc-*`; personalizar con `mat.<componente>-overrides()`.

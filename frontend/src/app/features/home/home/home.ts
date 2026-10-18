@@ -1,8 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatButton } from '@angular/material/button';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
 import { Auth } from '../../../core/auth/auth';
 
 const dateFormat = new Intl.DateTimeFormat('es-ES', {
@@ -12,6 +10,8 @@ const dateFormat = new Intl.DateTimeFormat('es-ES', {
   year: 'numeric',
 });
 
+const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+
 /** Today's date in Spanish with the first letter capitalised, e.g. "Sábado, 18 de octubre de 2026". */
 function formatToday(): string {
   const text = dateFormat.format(new Date());
@@ -19,24 +19,20 @@ function formatToday(): string {
 }
 
 @Component({
-  imports: [MatButton, MatIcon, MatProgressSpinner],
+  imports: [MatIcon, MatTableModule],
   selector: 'app-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './home.scss',
   templateUrl: './home.html',
 })
 export class Home {
-  private readonly auth = inject(Auth);
-  private readonly router = inject(Router);
-
-  protected readonly user = this.auth.user;
+  protected readonly user = inject(Auth).user;
   protected readonly today = formatToday();
-  protected readonly loggingOut = signal(false);
+  protected readonly year = new Date().getFullYear();
 
-  protected logout(): void {
-    if (this.loggingOut()) return;
-    this.loggingOut.set(true);
-    // The session is cleared and we leave even if the request fails.
-    const leave = () => void this.router.navigate(['/login']);
-    this.auth.logout().subscribe({ next: leave, error: leave });
-  }
+  // There is no invoices API yet: the register is always empty.
+  protected readonly invoices: never[] = [];
+  protected readonly columns = ['number', 'date', 'client', 'base', 'vat', 'total', 'status'];
+  protected readonly footerColumns = ['totalLabel', 'totalAmount', 'totalEnd'];
+  protected readonly total = euros.format(0);
 }

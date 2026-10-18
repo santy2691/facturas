@@ -1,0 +1,31 @@
+@if (user(); as user) {
+  <button
+    matButton
+    type="button"
+    class="trigger"
+    [matMenuTriggerFor]="menu"
+    [attr.aria-label]="'Cuenta de ' + fullName()"
+    [disabled]="loggingOut()"
+    disabledInteractive
+    [attr.aria-busy]="loggingOut()"
+  >
+    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+    <span class="name">{{ user.firstName }}</span>
+    @if (loggingOut()) {
+      <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
+    } @else {
+      <mat-icon iconPositionEnd>expand_more</mat-icon>
+    }
+  </button>
+
+  <mat-menu #menu="matMenu" xPosition="before" aria-label="Cuenta">
+    <div class="identity">
+      <span class="identity-name">{{ fullName() }}</span>
+      <span class="identity-email">{{ user.email }}</span>
+    </div>
+    <button mat-menu-item type="button" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Cerrar sesión</span>
+    </button>
+  </mat-menu>
+}

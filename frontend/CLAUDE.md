@@ -70,7 +70,7 @@ src/app/
   Al usar un icono nuevo, regenerar el subconjunto con la lista completa de iconos en
   orden alfabético y actualizar el comentario del `@font-face`:
   ```
-  ICONS=dark_mode,error,light_mode,logout,visibility,visibility_off
+  ICONS=check,dark_mode,description,error,expand_more,light_mode,logout,radio_button_unchecked,visibility,visibility_off
   CSS=$(curl -s -A "Mozilla/5.0 Chrome/130.0" "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=$ICONS&display=block")
   curl -s "$(echo "$CSS" | grep -oE 'https://fonts.gstatic.com[^)]+')" -o public/fonts/material-symbols-outlined.woff2
   ```

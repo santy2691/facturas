@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import {
   email,
   form,
@@ -10,7 +10,6 @@ import {
 } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
@@ -21,6 +20,13 @@ import { RegisterRequest } from '../../../core/auth/auth.models';
 
 // At least 8 characters, one Unicode letter and one digit (same rule as the backend).
 const PASSWORD_PATTERN = /^(?=.*\p{L})(?=.*\p{Nd}).{8,}$/u;
+
+/** The same rule as PASSWORD_PATTERN, split into the parts shown to the user while typing. */
+const PASSWORD_RULES: { label: string; test: (password: string) => boolean }[] = [
+  { label: 'Al menos 8 caracteres', test: (password) => password.length >= 8 },
+  { label: 'Una letra', test: (password) => /\p{L}/u.test(password) },
+  { label: 'Un número', test: (password) => /\p{Nd}/u.test(password) },
+];
 
 /** Name fields: the backend trims them before validating, so we do too. */
 function validateName(
@@ -41,10 +47,6 @@ function validateName(
     FormField,
     RouterLink,
     MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
     MatError,
     MatFormField,
     MatIcon,
@@ -75,6 +77,11 @@ export class RegisterForm {
     email: '',
     password: '',
     confirmPassword: '',
+  });
+
+  protected readonly passwordRules = computed(() => {
+    const password = this.model().password;
+    return PASSWORD_RULES.map((rule) => ({ label: rule.label, met: rule.test(password) }));
   });
 
   protected readonly registerForm = form(this.model, (path) => {
@@ -130,11 +137,22 @@ export class RegisterForm {
     confirmPassword: this.matcherFor('confirmPassword'),
   };
 
-  /** Client error (once the field is touched) or, failing that, the server one. */
+  /**
+   * Client error (once the field is touched) or, failing that, the server one. The confirmation
+   * also shows it while typing, as soon as it stops being the start of the password.
+   */
   protected errorOf(name: keyof RegisterRequest): string | null {
     const state = this.registerForm[name]();
-    const clientError = state.touched() ? state.errors()[0]?.message : undefined;
+    const clientError =
+      state.touched() || (name === 'confirmPassword' && this.confirmationDiverges())
+        ? state.errors()[0]?.message
+        : undefined;
     return clientError ?? this.fieldErrors()[name] ?? null;
+  }
+
+  private confirmationDiverges(): boolean {
+    const { password, confirmPassword } = this.model();
+    return confirmPassword !== '' && !password.startsWith(confirmPassword);
   }
 
   protected submit(event: Event): void {

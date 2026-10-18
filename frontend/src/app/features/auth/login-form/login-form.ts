@@ -2,7 +2,6 @@ import { Component, input, output, signal } from '@angular/core';
 import { email, form, FormField, required } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatFormField, MatLabel, MatError, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
@@ -16,10 +15,6 @@ import { LoginRequest } from '../../../core/auth/auth.models';
     FormField,
     RouterLink,
     MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
     MatError,
     MatFormField,
     MatIcon,

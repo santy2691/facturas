@@ -1,0 +1,49 @@
+.trigger {
+  gap: var(--space-2);
+  padding-inline: var(--space-1) var(--space-2);
+}
+
+// Initials on the identity tint: the only filled shape in the bar.
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-control);
+  display: grid;
+  place-items: center;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font: var(--type-meta);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.name {
+  color: var(--ink);
+}
+
+// The menu panel lives in an overlay outside :host, but its content is ours.
+.identity {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  margin-bottom: var(--space-2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.identity-name {
+  font: var(--type-body);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.identity-email {
+  font: var(--type-meta);
+  color: var(--ink-faint);
+}
+
+// Phones: initials only (the aria-label keeps the full name).
+@media (max-width: 599.98px) {
+  .name {
+    display: none;
+  }
+}

@@ -50,6 +50,60 @@ describe('RegisterForm', () => {
   const text = () => el.textContent ?? '';
   const PASSWORD_RULE = 'La contraseña debe tener al menos 8 caracteres, una letra y un número';
 
+  const rules = () =>
+    Array.from(el.querySelectorAll('#password-rules li')).map((li) => ({
+      text: li.querySelector('span')?.textContent,
+      met: li.classList.contains('met'),
+    }));
+
+  it('shows the heading without a card and groups the fields', () => {
+    expect(el.querySelector('.eyebrow')?.textContent).toBe('Alta de usuario');
+    expect(el.querySelector('mat-card')).toBeNull();
+    const legends = Array.from(el.querySelectorAll('fieldset legend')).map((l) => l.textContent);
+    expect(legends).toEqual(['Datos personales', 'Acceso']);
+    const [personal, access] = Array.from(el.querySelectorAll('fieldset'));
+    expect(personal.querySelector('#register-email')).toBeTruthy();
+    expect(access.querySelector('#register-password')).toBeTruthy();
+    expect(access.querySelector('#register-confirmPassword')).toBeTruthy();
+  });
+
+  it('lists the password requirements, all pending at first', () => {
+    expect(rules()).toEqual([
+      { text: 'Al menos 8 caracteres', met: false },
+      { text: 'Una letra', met: false },
+      { text: 'Un número', met: false },
+    ]);
+    const password = el.querySelector('#register-password')!;
+    expect(password.getAttribute('aria-describedby')).toContain('password-rules');
+    expect(el.querySelector('#password-rules')?.getAttribute('aria-live')).toBe('polite');
+  });
+
+  it('marks each requirement as the password is typed', async () => {
+    await type('password', 'á1');
+    expect(rules().map((rule) => rule.met)).toEqual([false, true, true]);
+    await type('password', 'abcdefgh');
+    expect(rules().map((rule) => rule.met)).toEqual([true, true, false]);
+    await type('password', 'abcdefg1');
+    expect(rules().map((rule) => rule.met)).toEqual([true, true, true]);
+    expect(el.querySelector('#password-rules li.met mat-icon')?.textContent?.trim()).toBe('check');
+  });
+
+  it('warns about a mismatch while typing the confirmation, not before', async () => {
+    await type('password', 'abcdefg1');
+    const confirmation = el.querySelector('#register-confirmPassword') as HTMLInputElement;
+    const typeOnly = async (value: string) => {
+      confirmation.value = value;
+      confirmation.dispatchEvent(new Event('input'));
+      await fixture.whenStable();
+    };
+    await typeOnly('abc');
+    expect(text()).not.toContain('Las contraseñas no coinciden');
+    await typeOnly('abx');
+    expect(text()).toContain('Las contraseñas no coinciden');
+    await typeOnly('abcdefg1');
+    expect(text()).not.toContain('Las contraseñas no coinciden');
+  });
+
   it('shows the title and labels in order', () => {
     expect(text()).toContain('Crear cuenta');
     const labels = Array.from(el.querySelectorAll('label')).map((l) => l.textContent?.trim());

@@ -1,34 +1,39 @@
-<mat-card appearance="outlined" class="auth-card">
-  <mat-card-header class="auth-card-header">
-    <h1 mat-card-title>Crear cuenta</h1>
-  </mat-card-header>
-  <mat-card-content class="auth-card-content">
-    <form (submit)="submit($event)" novalidate class="form">
-      <mat-form-field>
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          id="register-firstName"
-          type="text"
-          autocomplete="given-name"
-          [errorStateMatcher]="matchers.firstName"
-          [formField]="registerForm.firstName"
-        />
-        <mat-error>{{ errorOf('firstName') }}</mat-error>
-      </mat-form-field>
+<section class="auth" aria-labelledby="register-title">
+  <header class="auth-heading">
+    <p class="eyebrow">Alta de usuario</p>
+    <h1 id="register-title">Crear cuenta</h1>
+  </header>
 
-      <mat-form-field>
-        <mat-label>Apellidos</mat-label>
-        <input
-          matInput
-          id="register-lastName"
-          type="text"
-          autocomplete="family-name"
-          [errorStateMatcher]="matchers.lastName"
-          [formField]="registerForm.lastName"
-        />
-        <mat-error>{{ errorOf('lastName') }}</mat-error>
-      </mat-form-field>
+  <form (submit)="submit($event)" novalidate class="form">
+    <fieldset class="group">
+      <legend>Datos personales</legend>
+      <div class="row">
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            id="register-firstName"
+            type="text"
+            autocomplete="given-name"
+            [errorStateMatcher]="matchers.firstName"
+            [formField]="registerForm.firstName"
+          />
+          <mat-error>{{ errorOf('firstName') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Apellidos</mat-label>
+          <input
+            matInput
+            id="register-lastName"
+            type="text"
+            autocomplete="family-name"
+            [errorStateMatcher]="matchers.lastName"
+            [formField]="registerForm.lastName"
+          />
+          <mat-error>{{ errorOf('lastName') }}</mat-error>
+        </mat-form-field>
+      </div>
 
       <mat-form-field>
         <mat-label>Email</mat-label>
@@ -42,29 +47,47 @@
         />
         <mat-error>{{ errorOf('email') }}</mat-error>
       </mat-form-field>
+    </fieldset>
 
-      <mat-form-field>
-        <mat-label>Contraseña</mat-label>
-        <input
-          matInput
-          id="register-password"
-          autocomplete="new-password"
-          [type]="passwordMasked() ? 'password' : 'text'"
-          [errorStateMatcher]="matchers.password"
-          [formField]="registerForm.password"
-        />
-        <button
-          matIconButton
-          matSuffix
-          type="button"
-          class="mask-toggle"
-          [attr.aria-label]="passwordMasked() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
-          (click)="passwordMasked.set(!passwordMasked())"
-        >
-          <mat-icon>{{ passwordMasked() ? 'visibility' : 'visibility_off' }}</mat-icon>
-        </button>
-        <mat-error>{{ errorOf('password') }}</mat-error>
-      </mat-form-field>
+    <fieldset class="group group-ruled">
+      <legend>Acceso</legend>
+      <div class="password">
+        <mat-form-field>
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            id="register-password"
+            autocomplete="new-password"
+            aria-describedby="password-rules"
+            [type]="passwordMasked() ? 'password' : 'text'"
+            [errorStateMatcher]="matchers.password"
+            [formField]="registerForm.password"
+          />
+          <button
+            matIconButton
+            matSuffix
+            type="button"
+            class="mask-toggle"
+            [attr.aria-label]="passwordMasked() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            (click)="passwordMasked.set(!passwordMasked())"
+          >
+            <mat-icon>{{ passwordMasked() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error>{{ errorOf('password') }}</mat-error>
+        </mat-form-field>
+
+        <ul id="password-rules" class="rules" aria-live="polite">
+          @for (rule of passwordRules(); track rule.label) {
+            <li class="rule" [class.met]="rule.met">
+              <mat-icon aria-hidden="true">{{
+                rule.met ? 'check' : 'radio_button_unchecked'
+              }}</mat-icon>
+              <span>{{ rule.label }}</span>
+              <span class="cdk-visually-hidden">{{ rule.met ? '(cumplido)' : '(pendiente)' }}</span>
+            </li>
+          }
+        </ul>
+      </div>
 
       <mat-form-field>
         <mat-label>Confirmar contraseña</mat-label>
@@ -88,26 +111,26 @@
         </button>
         <mat-error>{{ errorOf('confirmPassword') }}</mat-error>
       </mat-form-field>
+    </fieldset>
 
-      @if (serverError(); as message) {
-        <app-form-alert [message]="message" />
+    @if (serverError(); as message) {
+      <app-form-alert [message]="message" />
+    }
+
+    <button
+      matButton="filled"
+      type="submit"
+      class="submit"
+      [disabled]="loading()"
+      disabledInteractive
+      [attr.aria-busy]="loading()"
+    >
+      @if (loading()) {
+        <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
       }
+      Crear cuenta
+    </button>
 
-      <button
-        matButton="filled"
-        type="submit"
-        class="submit"
-        [disabled]="loading()"
-        disabledInteractive
-        [attr.aria-busy]="loading()"
-      >
-        @if (loading()) {
-          <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
-        }
-        Crear cuenta
-      </button>
-
-      <p class="switch">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
-    </form>
-  </mat-card-content>
-</mat-card>
+    <p class="switch">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+  </form>
+</section>

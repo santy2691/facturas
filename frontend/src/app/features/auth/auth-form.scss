@@ -3,19 +3,103 @@
   animation: page-enter var(--duration-enter) var(--ease-out) both;
 }
 
-.auth-card-header {
-  padding: var(--space-6) var(--space-6) var(--space-4);
-  border-bottom: var(--rule-total);
+.auth {
+  display: grid;
+  gap: var(--space-8);
 }
 
-.auth-card-content {
-  padding: var(--space-6);
+.auth-heading {
+  display: grid;
+  gap: var(--space-1);
+
+  h1 {
+    font: var(--type-page-title);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+}
+
+.eyebrow,
+legend {
+  margin: 0;
+  font: var(--type-caption);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.eyebrow {
+  font: var(--type-meta);
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  padding: 0 0 var(--space-3);
+}
+
+.group-ruled {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+// Name and surname share a row while both fit; on phones they stack.
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+
+  mat-form-field {
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+}
+
+.password {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-6);
+  margin: 0;
+  padding: 0 0 0 var(--space-1);
+  list-style: none;
+  font: var(--type-meta);
+  color: var(--ink-faint);
+}
+
+// Met vs pending differ in icon shape and in lightness, never in hue alone.
+.rule {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  &.met {
+    color: var(--ink);
+  }
 }
 
 .submit {

@@ -1,6 +1,6 @@
 // The toolbar has no override token for its horizontal padding; the column below owns it.
 .bar {
-  border-bottom: var(--rule-total);
+  border-bottom: 1px solid var(--rule);
   padding-inline: 0;
 }
 

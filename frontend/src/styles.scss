@@ -4,8 +4,8 @@
 $system-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
 // Material Symbols Outlined (Apache 2.0, see public/fonts/material-symbols-LICENSE.txt),
-// self-hosted subset with only the icons the app uses: dark_mode, error, light_mode,
-// logout, visibility, visibility_off. To add an icon, regenerate the subset (see CLAUDE.md).
+// self-hosted subset with only the icons the app uses: check, dark_mode, description, error,
+// expand_more, light_mode, logout, radio_button_unchecked, visibility, visibility_off. To add an icon, regenerate the subset (see CLAUDE.md).
 @font-face {
   font-family: 'Material Symbols Outlined';
   font-style: normal;
@@ -61,7 +61,6 @@ html {
   --ink-faint: color-mix(in srgb, var(--mat-sys-on-surface) 65%, var(--mat-sys-surface));
   --ink-ghost: color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent);
   --rule: var(--mat-sys-outline-variant);
-  --rule-total: 3px double var(--rule);
   --carbon: var(--mat-sys-primary);
   --stamp: var(--mat-sys-error);
 
@@ -107,15 +106,20 @@ html {
       mobile-height: var(--bar-height),
     )
   );
-  @include mat.card-overrides(
+  @include mat.menu-overrides(
     (
-      outlined-container-color: var(--paper),
-      outlined-outline-color: var(--rule),
-      outlined-container-shape: var(--radius-sheet),
-      title-text-weight: 600,
-      title-text-size: var(--mat-sys-headline-medium-size),
-      title-text-line-height: var(--mat-sys-headline-medium-line-height),
-      title-text-tracking: -0.01em,
+      container-color: var(--paper),
+      container-shape: var(--radius-overlay),
+    )
+  );
+  @include mat.table-overrides(
+    (
+      background-color: var(--paper),
+      header-headline-color: var(--ink-faint),
+      header-headline-size: var(--mat-sys-label-small-size),
+      header-headline-weight: 500,
+      header-headline-tracking: 0.04em,
+      row-item-outline-color: var(--rule),
     )
   );
   @include mat.button-overrides(

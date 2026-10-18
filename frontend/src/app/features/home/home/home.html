@@ -1,27 +1,68 @@
 <section class="home">
-  <header class="page-header">
-    <div class="page-heading">
-      <p class="meta">{{ today }}</p>
-      <h1>Hola, {{ user()?.firstName }}</h1>
-    </div>
-    <button
-      matButton="tonal"
-      type="button"
-      [disabled]="loggingOut()"
-      disabledInteractive
-      [attr.aria-busy]="loggingOut()"
-      (click)="logout()"
-    >
-      @if (loggingOut()) {
-        <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
-      } @else {
-        <mat-icon>logout</mat-icon>
-      }
-      Cerrar sesión
-    </button>
+  <header class="page-heading">
+    <p class="meta">{{ today }}</p>
+    <h1>Hola, {{ user()?.firstName }}</h1>
   </header>
-  <div class="empty">
-    <h2>Todavía no hay nada por aquí</h2>
-    <p>Cuando haya secciones disponibles, aparecerán en esta página.</p>
-  </div>
+
+  <section class="ledger" aria-labelledby="ledger-title">
+    <div class="ledger-heading">
+      <h2 id="ledger-title">Libro registro</h2>
+      <span class="meta">Ejercicio {{ year }}</span>
+    </div>
+
+    <div class="ledger-sheet">
+      <table mat-table [dataSource]="invoices" class="ledger-table">
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef scope="col">Nº</th>
+          <td mat-cell *matCellDef="let invoice"></td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef scope="col">Fecha</th>
+          <td mat-cell *matCellDef="let invoice"></td>
+        </ng-container>
+        <ng-container matColumnDef="client">
+          <th mat-header-cell *matHeaderCellDef scope="col">Cliente</th>
+          <td mat-cell *matCellDef="let invoice"></td>
+        </ng-container>
+        <ng-container matColumnDef="base">
+          <th mat-header-cell *matHeaderCellDef scope="col" class="amount">Base</th>
+          <td mat-cell *matCellDef="let invoice" class="amount"></td>
+        </ng-container>
+        <ng-container matColumnDef="vat">
+          <th mat-header-cell *matHeaderCellDef scope="col" class="amount">IVA</th>
+          <td mat-cell *matCellDef="let invoice" class="amount"></td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef scope="col" class="amount">Total</th>
+          <td mat-cell *matCellDef="let invoice" class="amount"></td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef scope="col">Estado</th>
+          <td mat-cell *matCellDef="let invoice"></td>
+        </ng-container>
+
+        <!-- Footer-only columns: the label spans the first five. -->
+        <ng-container matColumnDef="totalLabel">
+          <td mat-footer-cell *matFooterCellDef colspan="5">Total del ejercicio</td>
+        </ng-container>
+        <ng-container matColumnDef="totalAmount">
+          <td mat-footer-cell *matFooterCellDef class="amount">{{ total }}</td>
+        </ng-container>
+        <ng-container matColumnDef="totalEnd">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        <tr *matNoDataRow>
+          <td [attr.colspan]="columns.length" class="empty">
+            <mat-icon aria-hidden="true">description</mat-icon>
+            <h3>Aún no hay facturas</h3>
+            <p>Cuando emitas la primera, aparecerá aquí ordenada por serie y número.</p>
+          </td>
+        </tr>
+        <tr mat-footer-row *matFooterRowDef="footerColumns" class="total-row"></tr>
+      </table>
+    </div>
+  </section>
 </section>
