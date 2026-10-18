@@ -1,6 +1,12 @@
 .trigger {
-  gap: var(--space-2);
   padding-inline: var(--space-1) var(--space-2);
+}
+
+.trigger-content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
 }
 
 // Initials on the identity tint: the only filled shape in the bar.

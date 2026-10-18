@@ -9,13 +9,16 @@
     disabledInteractive
     [attr.aria-busy]="loggingOut()"
   >
-    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-    <span class="name">{{ user.firstName }}</span>
-    @if (loggingOut()) {
-      <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
-    } @else {
-      <mat-icon iconPositionEnd>expand_more</mat-icon>
-    }
+    <!-- matButton wraps content in a non-flex label: our own row keeps it on one line. -->
+    <span class="trigger-content">
+      <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+      <span class="name">{{ user.firstName }}</span>
+      @if (loggingOut()) {
+        <mat-progress-spinner mode="indeterminate" diameter="18" aria-hidden="true" />
+      } @else {
+        <mat-icon aria-hidden="true">expand_more</mat-icon>
+      }
+    </span>
   </button>
 
   <mat-menu #menu="matMenu" xPosition="before" aria-label="Cuenta">
