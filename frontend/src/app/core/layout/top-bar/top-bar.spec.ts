@@ -41,6 +41,11 @@ describe('TopBar', () => {
     expect(el.querySelector('app-account-menu button')?.textContent).toContain('Ana');
   });
 
+  it('places the module navigation right after the brand', () => {
+    const inner = el.querySelector('.bar-inner')!;
+    expect(inner.children[1].tagName.toLowerCase()).toBe('app-module-nav');
+  });
+
   it('does not render the brand as a heading', () => {
     expect(el.querySelector('h1, h2, h3, h4, h5, h6')).toBeNull();
   });

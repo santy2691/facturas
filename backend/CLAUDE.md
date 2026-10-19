@@ -31,7 +31,9 @@ Paquetes por funcionalidad, no por capa:
 src/main/java/<paquete-base>/
 ├── common/   → excepciones, configuración y utilidades compartidas
 ├── auth/     → login, registro, refresh, JWT, configuración de seguridad
-└── user/     → gestión de usuarios
+├── user/     → gestión de usuarios
+├── group/    → (pendiente) grupos y sus miembros
+└── expense/  → (pendiente) gastos; cada gasto pertenece a un grupo
 
 Dentro de cada funcionalidad: controller, service, repository, dto, entity.
 

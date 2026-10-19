@@ -1,21 +1,24 @@
-# Sistema de diseño: "Libro de facturas"
+# Sistema de diseño: "Cuaderno de gastos"
 
-Aplicación para autónomos y pymes en España que emiten, revisan y cobran facturas. Debe sentirse como un
-**talonario bien llevado**: papel claro, tinta precisa, filetes finos, cifras alineadas. Serio y ordenado,
-sin la frialdad de un terminal ni la alegría de un SaaS de marketing.
+Aplicación para que grupos de usuarios (pisos compartidos, viajes, familias, amigos) registren y repartan
+**gastos compartidos**. Debe sentirse como un **cuaderno de cuentas bien llevado**: papel claro, tinta precisa,
+filetes finos, cifras alineadas. Claro y de confianza para hablar de dinero entre conocidos, sin la frialdad de
+un programa de contabilidad ni la alegría de un SaaS de marketing.
 
 Todo vive en `frontend/src/styles.scss` (tokens en `html`, tras `mat.theme()`). Sin hex: todo sale de `--mat-sys-*`.
 
 ## Dominio
-Talonario y matriz, serie y número correlativo (`2026/0001`), base imponible, IVA e IRPF, NIF/CIF,
-trimestre (303/130), vencimiento, cobrada/pendiente/vencida, libro registro, membrete, gestoría, sello.
+Grupo, miembro, gasto (siempre dentro de un grupo), quién pagó, entre quiénes se reparte, parte de cada uno,
+saldo, quién debe a quién, saldar. No es contabilidad fiscal: nada de IVA, IRPF, base imponible ni libro
+registro. La palabra "factura" no se usa para el dominio (solo en el nombre provisional de la app).
 
 ## Mundo de color
 Blanco roto del papel; azul violáceo del papel de calco y la tinta de sello (indigo `#6366F1`, definido solo
-en `src/styles/_theme-colors.scss`); grafito de los filetes; rojo de sello (errores y vencidas); verde apagado de
-"cobrada" (futuro); amarillo de subrayador (no se usa en la interfaz).
+en `src/styles/_theme-colors.scss`); grafito de los filetes; rojo de sello (solo errores); verde apagado
+para "saldado" (futuro, si llega a usarse, siempre acompañado de texto o icono); amarillo de subrayador (no se
+usa en la interfaz).
 
-## Firma: "margen de talonario"
+## Firma: "margen del cuaderno"
 Barra de 3x16px en `--carbon` delante de la marca. Los separadores son siempre un único filete de 1px en `--rule`:
 **nunca dobles filetes** (`border-style: double` ni dos líneas paralelas). Los títulos no llevan línea debajo; se
 separan del contenido con espacio.
@@ -26,6 +29,8 @@ separan del contenido con espacio.
 3. Tarjetas con sombra, botones píldora, marca aislada en login -> papel plano con filetes, radios 4/8 y el
    mismo membrete en todas las vistas. Login y registro sin tarjeta: el formulario va directamente sobre el papel.
 4. Botón de cerrar sesión en la página -> menú de cuenta en el membrete.
+5. Barra lateral de navegación -> pestañas de módulos en el membrete (pocos módulos: Inicio, Grupos) y
+   pestañas de sección dentro de cada grupo (Gastos, Miembros).
 
 ## Profundidad
 **Solo bordes.** Filetes simples de 1px en `--rule`, ninguna sombra propia. Toolbar
@@ -82,7 +87,8 @@ y `mat.strong-focus-indicators` (2px sólido en `--carbon`).
 ## Patrones
 - **Membrete** (`core/layout/top-bar`): `<header>` + `mat-toolbar` 56px, borde inferior 1px `--rule`, contenido
   centrado en `--page-max` con padding `--gutter`. Marca (barra 3x16px `--carbon`, 8px de separación, "Facturas"
-  16/24/600) a la izquierda; a la derecha el toggle y, con sesión, el menú de cuenta. Igual en app y en auth. La
+  16/24/600) a la izquierda, seguida (con sesión) de las pestañas de módulos; a la derecha el toggle y, con
+  sesión, el menú de cuenta. Igual en app y en auth. La
   marca es un `<span>`, no un enlace.
 - **Menú de cuenta** (`core/layout/account-menu`): `matButton` de texto con avatar (32px, radio control,
   `primary-container` / `on-primary-container`, iniciales 12/600), nombre (oculto bajo 600px; el `aria-label`
@@ -102,9 +108,23 @@ y `mat.strong-focus-indicators` (2px sólido en `--carbon`).
 - **Requisitos de contraseña**: lista bajo el campo (8px), 12/500, `aria-live="polite"` y enlazada con
   `aria-describedby`. Pendiente: `radio_button_unchecked` en `--ink-faint`; cumplido: `check` en `--ink`. Se
   distinguen por forma y luminosidad, nunca solo por tono.
-- **Tabla de registro** (inicio, "Libro registro"): `h2` 22/600 con metadato a la derecha; `mat-table` dentro de
-  una hoja con borde 1px `--rule`, radio 8px y `overflow-x: auto` (`min-width` 720px). Importes alineados a la
-  derecha. Vacía: fila `*matNoDataRow` con el patrón de estado vacío. Pie de total en 600 con filete superior.
+- **Pestañas de módulos** (`core/layout/module-nav`, lista en `modules.ts`): `nav` "Módulos" con enlaces normales
+  (`routerLink`, no `mat-tab-nav-bar`: es navegación del sitio, no pestañas de un panel) a 24px de la marca, items de
+  la altura de la barra con padding 0 12px y 4px entre ellos. Activo: `--ink` 600 y raya inferior 2px `--carbon`
+  apoyada sobre el filete de la barra, `aria-current="page"`. Inactivo: `--ink-soft` 500.
+- **Módulo pendiente**: item desactivado (`aria-disabled`, sin enlace) en `--ink-faint` con la etiqueta
+  **Próximamente** (caption 11/500, borde 1px `--rule`, radio control, padding 0 6px). Se usa igual en módulos y
+  secciones. Los módulos se declaran en una lista (etiqueta y ruta; sin ruta = no disponible).
+- **Menú de módulos en móvil** (bajo 600px): las pestañas se ocultan y aparece un `matIconButton` `menu` delante
+  de la marca que abre un `mat-menu` con los mismos módulos. Activo: 600 con la barra 3x16px `--carbon` de la
+  marca delante y `aria-current="page"`; pendientes desactivados (sin atenuar, en `--ink-faint`) con
+  "Próximamente". El menú de cuenta muestra solo las iniciales.
+- **Detalle de grupo** (pendiente de implementar): ruta "Grupos / <nombre>" (12/500, enlace en `--carbon`)
+  sobre el `h1`; debajo, pestañas de sección (Gastos, Miembros) de 48px sobre un filete 1px `--rule`, con el
+  mismo estilo de activo y pendiente que las de módulos y `overflow-x: auto` en móvil.
+- **Tabla de datos** (para gastos y miembros): `mat-table` dentro de una hoja con borde 1px `--rule`, radio 8px
+  y `overflow-x: auto`. Importes alineados a la derecha. Vacía: fila `*matNoDataRow` con el patrón de estado
+  vacío.
 - **Alerta de formulario** (`shared/form-alert`): `role="alert"`, error-container, radio 4px, padding 12/16,
   icono `error` de 20px y 8px de separación del texto.
 - **Estado vacío**: icono de 32px en `--ink-faint`, título 16/600 `--ink`, texto 14px `--ink-soft`, máx. 48ch,
@@ -115,6 +135,7 @@ y `mat.strong-focus-indicators` (2px sólido en `--carbon`).
   `:focus-visible` outline 2px `--carbon`, offset 2px.
 
 ## No hacer
+- Vocabulario fiscal o de facturación (IVA, IRPF, base imponible, libro registro, "factura" como concepto).
 - Sombras (`box-shadow`) propias.
 - Dobles filetes (`border-style: double`, dos líneas paralelas) y líneas bajo los títulos.
 - Botones píldora (salvo los `matIconButton`).

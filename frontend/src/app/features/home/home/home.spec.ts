@@ -1,7 +1,5 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatTableHarness } from '@angular/material/table/testing';
 import { Auth } from '../../../core/auth/auth';
 import { Home } from './home';
 
@@ -40,7 +38,7 @@ describe('Home', () => {
     vi.setSystemTime(new Date(2026, 9, 18));
     const dated = TestBed.createComponent(Home);
     await dated.whenStable();
-    expect(dated.nativeElement.querySelector('.page-heading .meta').textContent).toBe(
+    expect(dated.nativeElement.querySelector('.meta').textContent).toBe(
       'Domingo, 18 de octubre de 2026',
     );
   });
@@ -51,48 +49,18 @@ describe('Home', () => {
     expect(headings[0].textContent).toContain('Hola, Ana');
   });
 
-  it('has no buttons or links: sign-out lives in the account menu', () => {
+  it('shows the empty state for groups, without actions', () => {
+    const empty = el.querySelector('.empty')!;
+    expect(empty.querySelector('mat-icon')?.textContent?.trim()).toBe('groups');
+    expect(empty.querySelector('h2')?.textContent).toBe('Aún no tienes grupos');
+    expect(empty.querySelector('p')?.textContent?.trim()).toBe(
+      'Cuando el módulo Grupos esté disponible, podrás crear uno y repartir gastos con otras personas.',
+    );
     expect(el.querySelector('button, a')).toBeNull();
   });
 
-  it('shows the register for the current year', async () => {
-    vi.useFakeTimers({ toFake: ['Date'] });
-    vi.setSystemTime(new Date(2026, 9, 18));
-    const dated = TestBed.createComponent(Home);
-    await dated.whenStable();
-    const ledger = dated.nativeElement.querySelector('.ledger');
-    expect(ledger.querySelector('h2').textContent).toBe('Libro registro');
-    expect(ledger.textContent).toContain('Ejercicio 2026');
-  });
-
-  it('shows the register columns and no rows', async () => {
-    const table = await TestbedHarnessEnvironment.loader(fixture).getHarness(MatTableHarness);
-    const [header] = await table.getHeaderRows();
-    expect(await header.getCellTextByIndex()).toEqual([
-      'Nº',
-      'Fecha',
-      'Cliente',
-      'Base',
-      'IVA',
-      'Total',
-      'Estado',
-    ]);
-    expect(await table.getRows()).toEqual([]);
-  });
-
-  it('shows the empty state inside the table', () => {
-    const empty = el.querySelector('td.empty')!;
-    expect(empty.getAttribute('colspan')).toBe('7');
-    expect(empty.querySelector('h3')?.textContent).toBe('Aún no hay facturas');
-    expect(empty.querySelector('p')?.textContent).toBe(
-      'Cuando emitas la primera, aparecerá aquí ordenada por serie y número.',
-    );
-  });
-
-  it('shows a zero total for the year', async () => {
-    const table = await TestbedHarnessEnvironment.loader(fixture).getHarness(MatTableHarness);
-    const [footer] = await table.getFooterRows();
-    const cells = (await footer.getCellTextByIndex()).map((text) => text.replace(/\s/g, ' '));
-    expect(cells).toEqual(['Total del ejercicio', '0,00 €', '']);
+  it('has no tax vocabulary or invoice register', () => {
+    expect(el.querySelector('table')).toBeNull();
+    expect(el.textContent).not.toMatch(/IVA|Libro registro|factura/i);
   });
 });

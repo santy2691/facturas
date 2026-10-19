@@ -1,11 +1,17 @@
-# proyecto facturas
+# proyecto de gastos compartidos
 
 ## Contexto
-creacion de nueva aplicacion, donde primero se empezar creando el sistema de login y registro de usuario
-
+Aplicación para que grupos de usuarios registren y repartan **gastos compartidos**.
+Ya existen el login y el registro de usuarios; los grupos y los gastos están por desarrollar.
+El nombre visible de la app sigue siendo "Facturas" (provisional, pendiente de decidir).
 
 ## Glosario
  - **Usuario**: persona registrada que accede a la aplicación.
+ - **Grupo**: conjunto de usuarios que comparten gastos.
+ - **Miembro**: usuario que pertenece a un grupo.
+ - **Gasto**: importe compartido dentro de un grupo. Todo gasto pertenece a un único grupo.
+   Sustituye al antiguo concepto de "factura": no usar "factura" para el dominio (ni en código
+   ni en textos), salvo en el nombre provisional de la app.
 
 ## Aplicaciones
 - **backend/**: API REST. Única fuente de verdad y de reglas de negocio.
@@ -26,10 +32,23 @@ técnicas detalladas.
   Playwright para E2E
 
 ## Módulos funcionales
-<!-- TODO: completar al definir los primeros módulos.
-| Módulo | backend | frontend |
-|--------|---------|----------|
-| ...    | ...     | ...      | -->
+| Módulo | Estado | backend | frontend |
+|--------|--------|---------|----------|
+| Autenticación | hecho | `auth/`, `user/` | `features/auth/` |
+| Inicio | hecho | — | `features/home/` |
+| Grupos (con sus miembros) | pendiente | `group/` | `features/groups/` |
+| Gastos (dentro de un grupo) | pendiente | `expense/` | `features/expenses/` |
+
+Navegación (diseño aprobado, pendiente de implementar):
+- Primer nivel, en la barra superior: **Inicio** y **Grupos**.
+- Dentro de un grupo, pestañas de sección: **Gastos** y **Miembros**.
+- Los módulos y secciones aún no desarrollados se muestran desactivados con la etiqueta
+  "Próximamente"; al desarrollarse pasan a ser enlaces normales.
+
+## Grupos y gastos (pendiente)
+- Un gasto siempre pertenece a un grupo; no existen gastos sueltos.
+- Solo los miembros de un grupo pueden ver o modificar sus gastos; se comprueba SIEMPRE en
+  backend por pertenencia al grupo.
 
 ## Autenticación
 - Login en POST /api/auth/login → devuelve access token y refresh token.

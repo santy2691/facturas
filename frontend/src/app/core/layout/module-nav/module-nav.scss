@@ -1,0 +1,95 @@
+// Sits in the bar right after the brand; the tabs take the full bar height.
+:host {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+}
+
+.tabs {
+  align-self: stretch;
+  display: flex;
+  gap: var(--space-1);
+  margin-inline-start: var(--space-6);
+}
+
+// Full bar height; the 2px indicator sits on the bar's bottom rule.
+.tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  border-bottom: 2px solid transparent;
+  font: var(--type-body);
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+
+  &:is(a):hover {
+    color: var(--ink);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--carbon);
+    outline-offset: -2px;
+    border-radius: var(--radius-control);
+  }
+
+  &.active {
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom-color: var(--carbon);
+  }
+}
+
+// "Próximamente": caption with a hairline frame, same in tabs and menu.
+.soon {
+  margin-inline-start: var(--space-2);
+  padding: 0 6px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  font: var(--type-caption);
+  color: var(--ink-faint);
+}
+
+// Disabled menu items fade to 38%; pending modules stay readable at --ink-faint.
+.pending {
+  opacity: 1;
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+// Menu: the active module carries the brand's carbon mark.
+.item-mark {
+  display: inline-block;
+  width: 3px;
+  height: 16px;
+  margin-inline-end: var(--space-3);
+  border-radius: 1px;
+  vertical-align: middle;
+}
+
+.current {
+  font-weight: 600;
+
+  .item-mark {
+    background: var(--carbon);
+  }
+}
+
+.menu-toggle {
+  display: none;
+}
+
+// Phones: menu button before the brand, no tabs.
+@media (max-width: 599.98px) {
+  :host {
+    order: -1;
+  }
+
+  .tabs {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+}

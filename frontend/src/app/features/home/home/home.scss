@@ -25,41 +25,13 @@ h1 {
   color: var(--ink);
 }
 
-.ledger {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.ledger-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2);
-
-  h2 {
-    font: var(--type-section);
-    color: var(--ink);
-  }
-}
-
-// Wide tables scroll inside their sheet, never the page.
-.ledger-sheet {
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-sheet);
-  overflow-x: auto;
-}
-
-.ledger-table {
-  min-width: 720px;
-}
-
-.amount {
-  text-align: right;
-}
-
 .empty {
   padding: var(--space-12) var(--space-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sheet);
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
   text-align: center;
   color: var(--ink-soft);
 
@@ -70,22 +42,13 @@ h1 {
     color: var(--ink-faint);
   }
 
-  h3 {
-    margin-top: var(--space-2);
+  h2 {
     font: var(--type-subtitle);
     color: var(--ink);
   }
 
   p {
+    margin: 0;
     max-width: 48ch;
-    margin: var(--space-2) auto 0;
-  }
-}
-
-.total-row {
-  font-weight: 600;
-
-  td {
-    border-top: 1px solid var(--rule);
   }
 }

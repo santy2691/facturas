@@ -19,7 +19,16 @@ raíz para contexto, autenticación y reglas entre aplicaciones.
 src/app/
 ├── core/       → servicios globales, interceptores, guards
 ├── shared/     → componentes, pipes y directivas reutilizables
-└── features/   → una carpeta por funcionalidad (auth/, ...)
+└── features/   → una carpeta por funcionalidad (auth/, home/; en el futuro groups/, expenses/)
+
+## Navegación
+- Módulos de primer nivel (Inicio, Grupos) como pestañas en la barra superior; en móvil, botón de
+  menú que despliega la lista bajo la barra.
+- Secciones de un grupo (Gastos, Miembros) como pestañas dentro del detalle del grupo, con la ruta
+  "Grupos / <nombre>" encima del título. Los gastos solo existen bajo un grupo
+  (p. ej. `/grupos/:id/gastos`), nunca como ruta de primer nivel.
+- Módulos y secciones se declaran en una lista (etiqueta y ruta; sin ruta = no disponible); los no disponibles se
+  pintan desactivados con "Próximamente". Añadir un módulo = añadir una entrada a la lista.
 
 ## Convenciones
 - Angular moderno: nada de NgModules, `*ngIf`/`*ngFor` ni `@Input()`/`@Output()`
@@ -70,7 +79,7 @@ src/app/
   Al usar un icono nuevo, regenerar el subconjunto con la lista completa de iconos en
   orden alfabético y actualizar el comentario del `@font-face`:
   ```
-  ICONS=check,dark_mode,description,error,expand_more,light_mode,logout,radio_button_unchecked,visibility,visibility_off
+  ICONS=check,dark_mode,error,expand_more,groups,light_mode,logout,menu,radio_button_unchecked,visibility,visibility_off
   CSS=$(curl -s -A "Mozilla/5.0 Chrome/130.0" "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=$ICONS&display=block")
   curl -s "$(echo "$CSS" | grep -oE 'https://fonts.gstatic.com[^)]+')" -o public/fonts/material-symbols-outlined.woff2
   ```

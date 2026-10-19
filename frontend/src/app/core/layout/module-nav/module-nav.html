@@ -1,0 +1,50 @@
+@if (user()) {
+  <!-- Desktop: links styled as tabs in the bar. Plain links, not mat-tab-nav-bar: this is site
+       navigation, not tabs controlling a panel. -->
+  <nav class="tabs" aria-label="Módulos">
+    @for (module of modules; track module.label) {
+      @if (module.path; as path) {
+        <a class="tab" [routerLink]="path" routerLinkActive="active" ariaCurrentWhenActive="page">
+          {{ module.label }}
+        </a>
+      } @else {
+        <span class="tab pending" aria-disabled="true">
+          {{ module.label }}
+          <span class="soon">Próximamente</span>
+        </span>
+      }
+    }
+  </nav>
+
+  <!-- Phones: the same modules in a menu. -->
+  <button
+    matIconButton
+    type="button"
+    class="menu-toggle"
+    aria-label="Abrir menú de módulos"
+    [matMenuTriggerFor]="menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" aria-label="Módulos">
+    @for (module of modules; track module.label) {
+      @if (module.path; as path) {
+        <a
+          mat-menu-item
+          [routerLink]="path"
+          routerLinkActive="current"
+          ariaCurrentWhenActive="page"
+        >
+          <span class="item-mark" aria-hidden="true"></span>
+          {{ module.label }}
+        </a>
+      } @else {
+        <button mat-menu-item type="button" disabled class="pending">
+          <span class="item-mark" aria-hidden="true"></span>
+          {{ module.label }}
+          <span class="soon">Próximamente</span>
+        </button>
+      }
+    }
+  </mat-menu>
+}

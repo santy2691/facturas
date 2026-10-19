@@ -4,8 +4,8 @@
 $system-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
 // Material Symbols Outlined (Apache 2.0, see public/fonts/material-symbols-LICENSE.txt),
-// self-hosted subset with only the icons the app uses: check, dark_mode, description, error,
-// expand_more, light_mode, logout, radio_button_unchecked, visibility, visibility_off. To add an icon, regenerate the subset (see CLAUDE.md).
+// self-hosted subset with only the icons the app uses: check, dark_mode, error, expand_more,
+// groups, light_mode, logout, menu, radio_button_unchecked, visibility, visibility_off. To add an icon, regenerate the subset (see CLAUDE.md).
 @font-face {
   font-family: 'Material Symbols Outlined';
   font-style: normal;
