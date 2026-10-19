@@ -50,11 +50,15 @@
   color: var(--ink-faint);
 }
 
-// Disabled menu items fade to 38%; pending modules stay readable at --ink-faint.
 .pending {
-  opacity: 1;
   color: var(--ink-faint);
   cursor: default;
+}
+
+// Material fades disabled menu items to 38% and its menu styles load after ours, so the
+// selector needs [disabled] to win: pending modules stay readable at --ink-faint.
+.pending[disabled] {
+  opacity: 1;
 }
 
 // Menu: the active module carries the brand's carbon mark.
